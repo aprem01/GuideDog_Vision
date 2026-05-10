@@ -67,6 +67,12 @@ class NavigationEngine: NSObject, ARSessionDelegate, VoiceCommandDelegate {
     private var guideBackTimer: Timer?
     private var lastGuideAnnouncement: (distance: Float, time: TimeInterval) = (0, 0)
 
+    // Monocular depth fallback for non-LiDAR phones. Runs Depth-Anything Small
+    // (~3 FPS) and feeds metric depth into the same processDepth() pipeline
+    // LiDAR uses, once calibrated against a YOLO size-based distance hint.
+    private lazy var monoDepth: MonocularDepthEstimator = MonocularDepthEstimator()
+    private var monoDepthInflight = false
+
     // MARK: - Init
 
     override init() {
@@ -265,6 +271,28 @@ class NavigationEngine: NSObject, ARSessionDelegate, VoiceCommandDelegate {
             onCameraFrame?(frame.capturedImage)
         }
 
+        // LAYER 6: Monocular depth fallback (non-LiDAR phones only, ~3 FPS).
+        // Runs Depth-Anything Small on the camera frame. If we've calibrated
+        // against a YOLO known-height detection, the metric output feeds into
+        // the same processDepth() the LiDAR path uses — same alerts, same
+        // haptics, same spatial audio.
+        if !hasLiDAR, frameCount % 20 == 0,
+           monoDepth.isReady, !monoDepthInflight, trackingGood {
+            monoDepthInflight = true
+            let f = frame
+            monoDepth.estimate(pixelBuffer: f.capturedImage) { [weak self] _, metric in
+                guard let self = self else { return }
+                self.monoDepthInflight = false
+                if let metric = metric {
+                    // Same downstream pipeline as LiDAR: risk bands, haptics,
+                    // spatial audio, JS bridge, the entire cascade.
+                    self.detectionQueue.async { self.processDepth(metric) }
+                    // Demo heatmap overlay works too — DepthOverlayView only
+                    // cares that the buffer is Float32 metric depth.
+                    self.onDepthMap?(metric)
+                }
+            }
+        }
     }
 
     func session(_ session: ARSession, didFailWithError error: Error) {
@@ -587,6 +615,24 @@ class NavigationEngine: NSObject, ARSessionDelegate, VoiceCommandDelegate {
                 }
             } else {
                 dist = zoneDist ?? 5.0
+            }
+
+            // Calibrate the monocular depth estimator on non-LiDAR phones:
+            // when we have a confident size-based distance for a known-height
+            // object, sample the inverse-depth at the bbox center and feed it
+            // in. After a few such hints, the metric depth output becomes
+            // trustworthy and the LiDAR-style alert pipeline takes over.
+            if !hasLiDAR, monoDepth.isReady,
+               let sizeDist = sizeDist,
+               det.confidence >= 0.7,
+               sizeDist >= 0.5, sizeDist <= 5.0 {
+                let nx = Float(det.boundingBox.midX)
+                // Vision bounding boxes use bottom-left origin; the depth
+                // buffer is top-left. Flip Y so we sample the right point.
+                let ny = 1.0 - Float(det.boundingBox.midY)
+                if let inv = monoDepth.sampleInverseDepth(atNormalizedX: nx, normalizedY: ny) {
+                    monoDepth.updateCalibration(modelValue: inv, realMeters: sizeDist)
+                }
             }
 
             eventData.append(["label": det.label, "confidence": det.confidence, "direction": direction])

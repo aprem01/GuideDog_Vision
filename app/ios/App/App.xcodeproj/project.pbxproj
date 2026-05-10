@@ -30,6 +30,8 @@
 		AA0001112F900001000000001 /* SceneSegmenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001102F900001000000001 /* SceneSegmenter.swift */; };
 		AA0001172F900001000000001 /* VisionTricks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001162F900001000000001 /* VisionTricks.swift */; };
 		AA0001192F900001000000001 /* DepthOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001182F900001000000001 /* DepthOverlayView.swift */; };
+		AA00011B2F900001000000001 /* MonocularDepthEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00011A2F900001000000001 /* MonocularDepthEstimator.swift */; };
+		AA00011D2F900001000000001 /* DepthAnythingSmall.mlpackage in Resources */ = {isa = PBXBuildFile; fileRef = AA00011C2F900001000000001 /* DepthAnythingSmall.mlpackage */; };
 		AA0001132F900001000000001 /* YOLOv8n.mlpackage in Resources */ = {isa = PBXBuildFile; fileRef = AA0001122F900001000000001 /* YOLOv8n.mlpackage */; };
 		AA0001152F900001000000001 /* DeepLabV3.mlpackage in Resources */ = {isa = PBXBuildFile; fileRef = AA0001142F900001000000001 /* DeepLabV3.mlpackage */; };
 /* End PBXBuildFile section */
@@ -61,6 +63,8 @@
 		AA0001102F900001000000001 /* SceneSegmenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSegmenter.swift; sourceTree = "<group>"; };
 		AA0001162F900001000000001 /* VisionTricks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionTricks.swift; sourceTree = "<group>"; };
 		AA0001182F900001000000001 /* DepthOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthOverlayView.swift; sourceTree = "<group>"; };
+		AA00011A2F900001000000001 /* MonocularDepthEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonocularDepthEstimator.swift; sourceTree = "<group>"; };
+		AA00011C2F900001000000001 /* DepthAnythingSmall.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = DepthAnythingSmall.mlpackage; sourceTree = "<group>"; };
 		AA0001122F900001000000001 /* YOLOv8n.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = YOLOv8n.mlpackage; sourceTree = "<group>"; };
 		AA0001142F900001000000001 /* DeepLabV3.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper.mlpackage; path = DeepLabV3.mlpackage; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,6 +115,8 @@
 				AA00010A2F900001000000001 /* VoiceCommands.swift */,
 				AA0001162F900001000000001 /* VisionTricks.swift */,
 				AA0001182F900001000000001 /* DepthOverlayView.swift */,
+				AA00011A2F900001000000001 /* MonocularDepthEstimator.swift */,
+				AA00011C2F900001000000001 /* DepthAnythingSmall.mlpackage */,
 				2D5E4A8E2F8177C000375917 /* AudioPlugin.swift */,
 				2D5E4A8F2F8177C000375917 /* GuideDogPlugins.m */,
 				2D5E4A902F8177C000375917 /* LiDARPlugin.swift */,
@@ -200,6 +206,7 @@
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
 				AA0001132F900001000000001 /* YOLOv8n.mlpackage in Resources */,
 				AA0001152F900001000000001 /* DeepLabV3.mlpackage in Resources */,
+				AA00011D2F900001000000001 /* DepthAnythingSmall.mlpackage in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +229,7 @@
 				AA0001112F900001000000001 /* SceneSegmenter.swift in Sources */,
 				AA0001172F900001000000001 /* VisionTricks.swift in Sources */,
 				AA0001192F900001000000001 /* DepthOverlayView.swift in Sources */,
+				AA00011B2F900001000000001 /* MonocularDepthEstimator.swift in Sources */,
 				2D5E4A912F8177C000375917 /* AudioPlugin.swift in Sources */,
 				2D5E4A922F8177C000375917 /* GuideDogPlugins.m in Sources */,
 				2D5E4A932F8177C000375917 /* LiDARPlugin.swift in Sources */,
